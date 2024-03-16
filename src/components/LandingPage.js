@@ -1,6 +1,8 @@
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { PAGES } from "../constants/pages";
+import SportsHandballIcon from "@mui/icons-material/SportsHandball";
+import SportsIcon from "@mui/icons-material/Sports";
 
 export function LandingPage({ props }) {
   const { setCurrentPage } = props;
@@ -20,27 +22,39 @@ export function LandingPage({ props }) {
       >
         Your personal, AI-generated meal plan.
       </Typography>
-      <Typography variant="h5" gutterBottom>
+      <Typography variant="h5" gutterBottom sx={{ mb: "25px" }}>
         Tailor-made to suit your training plan and the food you already have in
         your fridge.
       </Typography>
       <Button
+        startIcon={<SportsHandballIcon />}
         onClick={() => {
-          setCurrentPage(PAGES.SIGNUP);
+          setCurrentPage(PAGES.ATHLETE_SIGNUP);
         }}
         variant="contained"
-        color="ffPrimary"
-        sx={{ width: "250px", m: "10px", borderRadius: "15px" }}
+        color="fitFeedGreen"
+        sx={{ width: "250px", m: "5px", borderRadius: "15px" }}
       >
-        Sign Up
+        Athlete Sign Up
+      </Button>
+      <Button
+        startIcon={<SportsIcon />}
+        onClick={() => {
+          setCurrentPage(PAGES.COACH_SIGNUP);
+        }}
+        variant="contained"
+        color="fitFeedBlue"
+        sx={{ width: "250px", m: "5px", borderRadius: "15px" }}
+      >
+        Coach Sign Up
       </Button>
       <Button
         onClick={() => {
           setCurrentPage(PAGES.LOGIN);
         }}
         variant="contained"
-        color="ffPrimary"
-        sx={{ width: "250px", m: "10px", borderRadius: "15px" }}
+        color="fitFeedBlue"
+        sx={{ width: "250px", m: "5px", borderRadius: "15px" }}
       >
         Login
       </Button>

@@ -4,13 +4,14 @@ import { LandingPage } from "./components/LandingPage";
 import { Logo } from "./components/Logo";
 import "./App.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { SignUp } from "./components/SignUp";
+import { AthleteSignUp } from "./components/AthleteSignUp";
 import { PAGES } from "./constants/pages";
 
 const theme = createTheme({
   palette: {
     mode: "dark",
-    ffPrimary: { main: "#56CCF2", contrastText: "#000" },
+    fitFeedBlue: { main: "#56CCF2", contrastText: "#000" },
+    fitFeedGreen: { main: "#56f29f", contrastText: "#000" },
   },
   typography: { fontFamily: `"Outfit", sans-serif` },
 });
@@ -20,8 +21,8 @@ function renderPage(page, props) {
     return <LandingPage props={props} />;
   }
 
-  if (page === PAGES.SIGNUP) {
-    return <SignUp props={props} />;
+  if (page === PAGES.ATHLETE_SIGNUP) {
+    return <AthleteSignUp props={props} />;
   }
 
   if (page === PAGES.ATHLETE_DASHBOARD) {
