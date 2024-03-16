@@ -23,7 +23,7 @@ export function Questionnaire({ props }) {
 
       const questions = data["questions"];
       setQuestions(questions);
-      setUserData(reduce(questions, (pv, cv) => ({ ...pv, [cv.id]: "" }), {}));
+      setUserData(reduce(questions, (pv, cv) => ({ ...pv, [cv.questionName]: "" }), {}));
     }
 
     fetchTypeQuestions();

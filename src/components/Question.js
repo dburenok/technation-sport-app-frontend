@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { PhotoCamera } from "@mui/icons-material";
 import {
   FormControl,
@@ -6,6 +7,7 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
+
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { LocalizationProvider } from "@mui/x-date-pickers";
@@ -39,7 +41,7 @@ function renderInput(currentQuestion, userData, updateUserData) {
   if (questionType === "text") {
     return (
       <TextField
-        value={userData[id]}
+        value={userData[questionName]}
         onChange={(e) => updateUserData(e.target.value)}
         label={startCase(questionName)}
         variant="outlined"
@@ -51,7 +53,7 @@ function renderInput(currentQuestion, userData, updateUserData) {
     return (
       <TextField
         multiline
-        value={userData[id]}
+        value={userData[questionName]}
         onChange={(e) => updateUserData(e.target.value)}
         label={startCase(questionName)}
         variant="outlined"
@@ -62,7 +64,7 @@ function renderInput(currentQuestion, userData, updateUserData) {
   if (questionType === "number") {
     return (
       <TextField
-        value={userData[id]}
+        value={userData[questionName]}
         onChange={(e) => updateUserData(e.target.value)}
         label={startCase(questionName)}
         variant="outlined"
@@ -80,11 +82,11 @@ function renderInput(currentQuestion, userData, updateUserData) {
               <Checkbox
                 onChange={(e) => {
                   const newOptions = {
-                    ...userData[id],
+                    ...userData[questionName],
                     [option]: e.target.checked,
                   };
 
-                  updateUserData(newOptions);
+                  updateUserData( e.target.checked);
                 }}
               />
             }
@@ -133,14 +135,18 @@ function renderInput(currentQuestion, userData, updateUserData) {
 export function Question({ props }) {
   const { questions, questionIndex, userData, setUserData } = props;
 
+
   if (isEmpty(questions)) {
     return "No questions provided";
   }
-
   const currentQuestion = questions[questionIndex];
 
   function updateUserData(newValue) {
-    setUserData({ ...userData, [currentQuestion.id]: newValue });
+    if(currentQuestion && currentQuestion.questionName === "smoking") {
+      console.log(">>>>>>>>",newValue);
+      setUserData({ ...userData, [currentQuestion.questionName]: newValue });
+    }
+    setUserData({ ...userData, [currentQuestion.questionName]: newValue });
   }
 
   return (
