@@ -1,13 +1,13 @@
 import { reduce } from "lodash";
 import { useEffect, useState } from "react";
-import { API_QUESTIONS_URL, API_SAVE_USER_URL } from "../constants/endpoints";
+import { COACH_QUESTIONS_URL, ATHLETE_QUESTIONS_URL, API_SAVE_USER_URL } from "../constants/endpoints";
 import { PAGES } from "../constants/pages";
 import { AccountSignUp } from "./AccountSignUp";
 import { NavigationButtons } from "./NavigationButtons";
 import { Question } from "./Question";
 
-export function AthleteSignUp({ props }) {
-  const { setCurrentPage } = props;
+export function Questionnaire({ props }) {
+  const { setCurrentPage, type } = props;
 
   const [questions, setQuestions] = useState([]);
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -16,8 +16,9 @@ export function AthleteSignUp({ props }) {
   const [userAccountCompleted, setUserAccountCompleted] = useState(false);
 
   useEffect(() => {
-    async function fetchQuestions() {
-      const res = await fetch(API_QUESTIONS_URL);
+    async function fetchTypeQuestions() {
+      const url = type === "athlete" ? ATHLETE_QUESTIONS_URL : COACH_QUESTIONS_URL;
+      const res = await fetch(url);
       const data = await res.json();
 
       const questions = data["questions"];
@@ -25,13 +26,13 @@ export function AthleteSignUp({ props }) {
       setUserData(reduce(questions, (pv, cv) => ({ ...pv, [cv.id]: "" }), {}));
     }
 
-    fetchQuestions();
-  }, []);
+    fetchTypeQuestions();
+  }, [type]);
 
-  async function submitAthleteData() {
-    const athleteData = { ...userAccountData, userData };
+  async function submitData() {
+    const completedData = { ...userAccountData, userData };
 
-    const body = JSON.stringify(athleteData);
+    const body = JSON.stringify(completedData);
     const res = await fetch(API_SAVE_USER_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -40,7 +41,8 @@ export function AthleteSignUp({ props }) {
     const data = await res.json();
     console.log(data);
 
-    setCurrentPage(PAGES.ATHLETE_DASHBOARD);
+    const nextPage = type === "athlete" ? PAGES.ATHLETE_DASHBOARD : PAGES.COACH_DASHBOARD;
+    setCurrentPage(nextPage);
   }
 
   if (userAccountCompleted) {
@@ -50,20 +52,15 @@ export function AthleteSignUp({ props }) {
         <NavigationButtons
           props={{
             questionIndex,
-            maxIndex: questions.length,
             setQuestionIndex,
-            setCurrentPage,
-            submitAthleteData,
+            maxIndex: questions.length,
             setUserAccountCompleted,
+            submitData,
           }}
         />
       </>
     );
   }
 
-  return (
-    <AccountSignUp
-      props={{ setUserAccountData, setUserAccountCompleted, setCurrentPage }}
-    />
-  );
+  return <AccountSignUp props={{ setUserAccountData, setUserAccountCompleted, setCurrentPage, type }} />;
 }

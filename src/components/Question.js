@@ -1,3 +1,4 @@
+import { PhotoCamera } from "@mui/icons-material";
 import {
   FormControl,
   FormControlLabel,
@@ -5,6 +6,7 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
+import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -37,6 +39,18 @@ function renderInput(currentQuestion, userData, updateUserData) {
   if (questionType === "text") {
     return (
       <TextField
+        value={userData[id]}
+        onChange={(e) => updateUserData(e.target.value)}
+        label={startCase(questionName)}
+        variant="outlined"
+      />
+    );
+  }
+
+  if (questionType === "textarea") {
+    return (
+      <TextField
+        multiline
         value={userData[id]}
         onChange={(e) => updateUserData(e.target.value)}
         label={startCase(questionName)}
@@ -99,6 +113,20 @@ function renderInput(currentQuestion, userData, updateUserData) {
     );
   }
 
+  if (questionType === "file") {
+    return (
+      <Button
+        startIcon={<PhotoCamera />}
+        variant="contained"
+        color="fitFeedBlue"
+        component="label"
+      >
+        Upload File
+        <input onChange={handleFileUpload} type="file" hidden />
+      </Button>
+    );
+  }
+
   return `TODO: Implement questionType ${questionType}`;
 }
 
@@ -128,4 +156,11 @@ export function Question({ props }) {
       {renderInput(currentQuestion, userData, updateUserData)}
     </>
   );
+}
+
+function handleFileUpload(e) {
+  const file = e.target.files[0];
+  const formData = new FormData();
+  formData.append("file", file);
+  // TODO send formData to backend - need to use formData instead of JSON
 }

@@ -4,7 +4,7 @@ import { LandingPage } from "./components/LandingPage";
 import { Logo } from "./components/Logo";
 import "./App.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { AthleteSignUp } from "./components/AthleteSignUp";
+import { Questionnaire } from "./components/Questionnaire";
 import { PAGES } from "./constants/pages";
 
 const theme = createTheme({
@@ -22,7 +22,11 @@ function renderPage(page, props) {
   }
 
   if (page === PAGES.ATHLETE_SIGNUP) {
-    return <AthleteSignUp props={props} />;
+    return <Questionnaire props={{ ...props, type: "athlete" }} />;
+  }
+
+  if (page === PAGES.COACH_SIGNUP) {
+    return <Questionnaire props={{ ...props, type: "coach" }} />;
   }
 
   if (page === PAGES.ATHLETE_DASHBOARD) {

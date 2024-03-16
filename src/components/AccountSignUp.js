@@ -1,11 +1,13 @@
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { startCase } from "lodash";
 import { useState } from "react";
 import { PAGES } from "../constants/pages";
 
 export function AccountSignUp({ props }) {
-  const { setUserAccountData, setUserAccountCompleted, setCurrentPage } = props;
+  const { setUserAccountData, setUserAccountCompleted, setCurrentPage, type } =
+    props;
 
   const [user, setUser] = useState({
     firstName: "",
@@ -23,7 +25,7 @@ export function AccountSignUp({ props }) {
         sx={{ padding: "15px" }}
         gutterBottom
       >
-        New Athlete Account
+        New {startCase(type)} Account
       </Typography>
       <TextField
         value={user.firstName}
