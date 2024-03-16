@@ -1,0 +1,6 @@
+export const PAGES = {
+  HOME: "HOME",
+  SIGNUP: "SIGNUP",
+  LOGIN: "LOGIN",
+  ATHLETE_DASHBOARD: "ATHLETE_DASHBOARD",
+};
