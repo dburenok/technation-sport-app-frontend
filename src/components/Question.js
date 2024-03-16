@@ -1,12 +1,5 @@
-import { useEffect, useState } from "react";
 import { PhotoCamera } from "@mui/icons-material";
-import {
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  Radio,
-  RadioGroup,
-} from "@mui/material";
+import { FormControl, FormControlLabel, FormGroup, Radio, RadioGroup } from "@mui/material";
 
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -19,19 +12,14 @@ import Checkbox from "@mui/material/Checkbox";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 function renderInput(currentQuestion, userData, updateUserData) {
-  const { id, options, questionName, questionType } = currentQuestion;
+  const { options, questionName, questionType } = currentQuestion;
 
   if (questionType === "radio") {
     return (
       <FormControl>
         <RadioGroup onChange={(e) => updateUserData(e.target.value)}>
           {map(options, (option, i) => (
-            <FormControlLabel
-              key={i}
-              value={option}
-              control={<Radio />}
-              label={startCase(option)}
-            />
+            <FormControlLabel key={i} value={option} control={<Radio />} label={startCase(option)} />
           ))}
         </RadioGroup>
       </FormControl>
@@ -86,7 +74,7 @@ function renderInput(currentQuestion, userData, updateUserData) {
                     [option]: e.target.checked,
                   };
 
-                  updateUserData( e.target.checked);
+                  updateUserData(newOptions);
                 }}
               />
             }
@@ -117,12 +105,7 @@ function renderInput(currentQuestion, userData, updateUserData) {
 
   if (questionType === "file") {
     return (
-      <Button
-        startIcon={<PhotoCamera />}
-        variant="contained"
-        color="fitFeedBlue"
-        component="label"
-      >
+      <Button startIcon={<PhotoCamera />} variant="contained" color="fitFeedBlue" component="label">
         Upload File
         <input onChange={handleFileUpload} type="file" hidden />
       </Button>
@@ -135,28 +118,18 @@ function renderInput(currentQuestion, userData, updateUserData) {
 export function Question({ props }) {
   const { questions, questionIndex, userData, setUserData } = props;
 
-
   if (isEmpty(questions)) {
     return "No questions provided";
   }
   const currentQuestion = questions[questionIndex];
 
   function updateUserData(newValue) {
-    if(currentQuestion && currentQuestion.questionName === "smoking") {
-      console.log(">>>>>>>>",newValue);
-      setUserData({ ...userData, [currentQuestion.questionName]: newValue });
-    }
     setUserData({ ...userData, [currentQuestion.questionName]: newValue });
   }
 
   return (
     <>
-      <Typography
-        variant="h4"
-        fontWeight="bold"
-        sx={{ padding: "15px" }}
-        gutterBottom
-      >
+      <Typography variant="h4" fontWeight="bold" sx={{ padding: "15px" }} gutterBottom>
         {currentQuestion.question}
       </Typography>
       {renderInput(currentQuestion, userData, updateUserData)}
