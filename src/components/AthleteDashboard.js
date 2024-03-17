@@ -12,27 +12,62 @@ export function AthleteDashboard({ props }) {
   const [mealPlan, setMealPlan] = useState(null);
   const [foodItems, setFoodItems] = useState(DEFAULT_FOOD_ITEMS);
 
+  function retryAsync(fn, retries = 3, delay = 4000) {
+    return new Promise((resolve, reject) => {
+      const attempt = async () => {
+        try {
+          const result = await fn();
+          resolve(result);
+        } catch (error) {
+          if (retries === 0) {
+            reject(error);
+          } else {
+            setTimeout(() => {
+              console.log(`Retrying... attempts left: ${retries}`);
+              retries--;
+              attempt();
+            }, delay);
+          }
+        }
+      };
+      attempt();
+    });
+  }
+
   const fetchData = useCallback(() => {
     async function fetchFridgeImagePath() {
-      const res = await fetch(`${IMAGE_PATH_URL}/${loggedInUserId}`);
-      const { imagePath } = await res.json();
-      setFridgeImagePath(imagePath);
+      await retryAsync(async () => {
+        const res = await fetch(`${IMAGE_PATH_URL}/${loggedInUserId}`);
+        if (!res.ok) { // Checks for response status outside the 200-299 range
+          throw new Error(`Failed to fetch, status code: ${res.status}`);
+        }
+        const { imagePath } = await res.json();
+        setFridgeImagePath(imagePath);
+      });
     }
-
+  
     async function fetchMealPlan() {
-      const res = await fetch(`${MEAL_PLAN_URL}/${loggedInUserId}`);
-      const data = await res.json();
-
-      if (!data.data) {
-        return;
-      }
-
-      setMealPlan(data.data);
-      setFoodItems(map(data.data.foodItems.split(","), (w) => startCase(w)));
+      await retryAsync(async () => {
+        const res = await fetch(`${MEAL_PLAN_URL}/${loggedInUserId}`);
+        if (!res.ok) { // Checks for response status outside the 200-299 range
+          throw new Error(`Failed to fetch, status code: ${res.status}`);
+        }
+        const data = await res.json();
+  
+        if (!data.data) {
+          return;
+        }
+  
+        setMealPlan(data.data);
+        setFoodItems(map(data.data.foodItems.split(","), (w) => startCase(w)));
+      });
     }
-
-    fetchFridgeImagePath().then(() => fetchMealPlan());
+  
+    fetchFridgeImagePath()
+      .then(fetchMealPlan)
+      .catch((error) => console.error("Fetch failed:", error.message));
   }, [loggedInUserId]);
+  
 
   useEffect(() => {
     fetchData();
