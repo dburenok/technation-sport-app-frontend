@@ -30,7 +30,7 @@ function renderPage(page, props) {
   }
 
   if (page === PAGES.ATHLETE_DASHBOARD) {
-    return <AthleteDashboard />;
+    return <AthleteDashboard props={props} />;
   }
 
   return `TODO: Implement ${page} page`;
@@ -38,6 +38,8 @@ function renderPage(page, props) {
 
 function App() {
   const [currentPage, setCurrentPage] = useState(PAGES.HOME);
+  const [loggedInUserId, setLoggedInUserId] = useState("70"); // set manually for demo
+  console.log({ loggedInUserId });
 
   return (
     <ThemeProvider theme={theme}>
@@ -46,6 +48,8 @@ function App() {
         {renderPage(currentPage, {
           currentPage,
           setCurrentPage,
+          loggedInUserId,
+          setLoggedInUserId,
         })}
       </div>
     </ThemeProvider>

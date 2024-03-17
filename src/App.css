@@ -10,7 +10,6 @@
 .logo {
   display: flex;
   align-items: center;
-  margin-top: 25px;
   margin-bottom: 50px;
 }
 
@@ -20,10 +19,13 @@
   align-items: center;
   justify-content: flex-start;
   font-size: calc(10px + 2vmin);
-  color: white;
   padding: 20px;
 }
 
 .btn {
   color: red;
+}
+
+.dashboard {
+  padding: 20px;
 }
