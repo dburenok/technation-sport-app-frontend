@@ -26,7 +26,7 @@ function renderInput(currentQuestion, userData, updateUserData) {
     );
   }
 
-  if (questionType === "text") {
+  if (questionType === "text" || questionType === "number") {
     return (
       <TextField
         value={userData[questionName]}
@@ -41,17 +41,6 @@ function renderInput(currentQuestion, userData, updateUserData) {
     return (
       <TextField
         multiline
-        value={userData[questionName]}
-        onChange={(e) => updateUserData(e.target.value)}
-        label={startCase(questionName)}
-        variant="outlined"
-      />
-    );
-  }
-
-  if (questionType === "number") {
-    return (
-      <TextField
         value={userData[questionName]}
         onChange={(e) => updateUserData(e.target.value)}
         label={startCase(questionName)}
@@ -107,7 +96,7 @@ function renderInput(currentQuestion, userData, updateUserData) {
     return (
       <Button startIcon={<PhotoCamera />} variant="contained" color="fitFeedBlue" component="label">
         Upload File
-        <input onChange={handleFileUpload} type="file" hidden />
+        <input onChange={(e) => imageToBase64(e.target.files[0]).then((s) => updateUserData(s))} type="file" hidden />
       </Button>
     );
   }
@@ -137,9 +126,11 @@ export function Question({ props }) {
   );
 }
 
-function handleFileUpload(e) {
-  const file = e.target.files[0];
-  const formData = new FormData();
-  formData.append("file", file);
-  // TODO send formData to backend - need to use formData instead of JSON
+async function imageToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+  });
 }
