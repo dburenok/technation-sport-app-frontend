@@ -12,7 +12,7 @@ export function AthleteDashboard({ props }) {
   const [mealPlan, setMealPlan] = useState(null);
   const [foodItems, setFoodItems] = useState(DEFAULT_FOOD_ITEMS);
 
-  function retryAsync(fn, retries = 3, delay = 4000) {
+  function retryAsync(fn, retries = 3, delay = 5000) {
     return new Promise((resolve, reject) => {
       const attempt = async () => {
         try {
@@ -38,36 +38,37 @@ export function AthleteDashboard({ props }) {
     async function fetchFridgeImagePath() {
       await retryAsync(async () => {
         const res = await fetch(`${IMAGE_PATH_URL}/${loggedInUserId}`);
-        if (!res.ok) { // Checks for response status outside the 200-299 range
+        if (!res.ok) {
+          // Checks for response status outside the 200-299 range
           throw new Error(`Failed to fetch, status code: ${res.status}`);
         }
         const { imagePath } = await res.json();
         setFridgeImagePath(imagePath);
       });
     }
-  
+
     async function fetchMealPlan() {
       await retryAsync(async () => {
         const res = await fetch(`${MEAL_PLAN_URL}/${loggedInUserId}`);
-        if (!res.ok) { // Checks for response status outside the 200-299 range
+        if (!res.ok) {
+          // Checks for response status outside the 200-299 range
           throw new Error(`Failed to fetch, status code: ${res.status}`);
         }
         const data = await res.json();
-  
+
         if (!data.data) {
           return;
         }
-  
+
         setMealPlan(data.data);
         setFoodItems(map(data.data.foodItems.split(","), (w) => startCase(w)));
       });
     }
-  
+
     fetchFridgeImagePath()
       .then(fetchMealPlan)
       .catch((error) => console.error("Fetch failed:", error.message));
   }, [loggedInUserId]);
-  
 
   useEffect(() => {
     fetchData();
