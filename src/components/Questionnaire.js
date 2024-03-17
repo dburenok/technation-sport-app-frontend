@@ -1,13 +1,13 @@
 import { reduce } from "lodash";
 import { useEffect, useState } from "react";
-import { COACH_QUESTIONS_URL, ATHLETE_QUESTIONS_URL, API_SAVE_USER_URL } from "../constants/endpoints";
+import { COACH_QUESTIONS_URL, ATHLETE_QUESTIONS_URL, SAVE_USER_URL } from "../constants/endpoints";
 import { PAGES } from "../constants/pages";
 import { AccountSignUp } from "./AccountSignUp";
 import { NavigationButtons } from "./NavigationButtons";
 import { Question } from "./Question";
 
 export function Questionnaire({ props }) {
-  const { setCurrentPage, type } = props;
+  const { setCurrentPage, type, setLoggedInUserId } = props;
 
   const [questions, setQuestions] = useState([]);
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -33,13 +33,14 @@ export function Questionnaire({ props }) {
     const completedData = { ...userAccountData, userData };
 
     const body = JSON.stringify(completedData);
-    const res = await fetch(API_SAVE_USER_URL, {
+    const res = await fetch(SAVE_USER_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body,
     });
     const data = await res.json();
-    console.log(data);
+    const userId = `${data.data.user.id}`;
+    setLoggedInUserId(userId);
 
     const nextPage = type === "athlete" ? PAGES.ATHLETE_DASHBOARD : PAGES.COACH_DASHBOARD;
     setCurrentPage(nextPage);

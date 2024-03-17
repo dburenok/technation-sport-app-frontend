@@ -47,7 +47,7 @@ export function LandingPage({ props }) {
         Coach Sign Up
       </Button>
       <Button
-        onClick={() => setCurrentPage(PAGES.LOGIN)}
+        onClick={() => setCurrentPage(PAGES.ATHLETE_DASHBOARD)} // workaround for demo purposes
         variant="contained"
         color="fitFeedBlue"
         sx={{ width: "250px", m: "5px", borderRadius: "15px" }}
