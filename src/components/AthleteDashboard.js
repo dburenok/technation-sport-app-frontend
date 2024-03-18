@@ -12,7 +12,7 @@ export function AthleteDashboard({ props }) {
   const [mealPlan, setMealPlan] = useState(null);
   const [foodItems, setFoodItems] = useState(DEFAULT_FOOD_ITEMS);
 
-  function retryAsync(fn, retries = 3, delay = 5000) {
+  function retryAsync(fn, retries = 5, delay = 5000) {
     return new Promise((resolve, reject) => {
       const attempt = async () => {
         try {
