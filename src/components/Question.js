@@ -29,6 +29,7 @@ function renderInput(currentQuestion, userData, updateUserData) {
   if (questionType === "text" || questionType === "number") {
     return (
       <TextField
+        autoComplete="off"
         value={userData[questionName]}
         onChange={(e) => updateUserData(e.target.value)}
         label={startCase(questionName)}
@@ -41,6 +42,7 @@ function renderInput(currentQuestion, userData, updateUserData) {
     return (
       <TextField
         multiline
+        autoComplete="off"
         value={userData[questionName]}
         onChange={(e) => updateUserData(e.target.value)}
         label={startCase(questionName)}
